@@ -258,6 +258,135 @@
   .dl-btn:active { background: #1d3c85; }
   .dl-btn svg { width: 17px; height: 17px; }
   .dl-meta { font-size: 12px; color: var(--text-muted); }
+
+  /* ── 국세상담센터 Q&A 색인 ── */
+  .nq-wrap { display:flex; flex-direction:column; height:calc(100vh - 205px); min-height:470px;
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+  .nq-bar { flex:none; display:flex; align-items:center; gap:12px; padding:13px 16px;
+    border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .nq-search { flex:1; min-width:200px; position:relative; }
+  .nq-search input { width:100%; font-family:inherit; font-size:14.5px; color:var(--text-primary);
+    background:var(--bg); border:1.5px solid var(--border); border-radius:8px;
+    padding:10px 14px 10px 38px; outline:none; transition:border-color .12s, box-shadow .12s, background .12s; }
+  .nq-search input::placeholder { color:var(--text-muted); }
+  .nq-search input:focus { background:var(--surface); border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(45,90,196,.12); }
+  .nq-search svg { position:absolute; left:13px; top:50%; transform:translateY(-50%);
+    color:var(--text-muted); pointer-events:none; }
+  .nq-stamp { flex:none; font-size:10.5px; line-height:1.35; text-align:center; color:var(--navy);
+    border:1px solid var(--navy); border-radius:3px; padding:3px 8px; }
+  .nq-stamp b { display:block; font-size:11.5px; }
+  .nq-tips { flex:none; padding:0 16px 11px; font-size:11.5px; color:var(--text-muted);
+    display:flex; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--border); }
+  .nq-tips b { color:var(--text-secondary); font-weight:600; }
+
+  .nq-body { flex:1; display:grid; grid-template-columns:270px 1fr; min-height:0; }
+  .nq-side { border-right:1px solid var(--border); background:#fafbfc; display:flex;
+    flex-direction:column; min-height:0; }
+  .nq-sh { flex:none; display:flex; align-items:center; gap:8px; padding:10px 12px 9px;
+    border-bottom:1px solid var(--border); }
+  .nq-sh .l { font-size:10.5px; font-weight:700; letter-spacing:.13em; color:var(--text-muted); }
+  .nq-sh .sp { flex:1; }
+  .nq-tgl { font-family:inherit; font-size:11px; font-weight:600; color:var(--text-muted);
+    background:var(--surface); border:1px solid var(--border); border-radius:4px;
+    padding:3px 7px; cursor:pointer; white-space:nowrap; }
+  .nq-tgl:hover { border-color:var(--accent); color:var(--accent); }
+  .nq-tgl[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .nq-tree { flex:1; overflow-y:auto; padding:5px 0 24px; overscroll-behavior:contain; }
+
+  .nq-nd { display:flex; align-items:baseline; gap:6px; width:100%; text-align:left; background:none;
+    border:none; font-family:inherit; cursor:pointer; color:var(--text-secondary);
+    padding:5px 11px 5px 7px; line-height:1.4; }
+  .nq-nd:hover { background:var(--accent-light); }
+  .nq-nd .cv { flex:none; width:11px; font-size:8px; color:var(--text-muted); text-align:center;
+    transition:transform .13s; }
+  .nq-nd.op > .cv { transform:rotate(90deg); }
+  .nq-nd .nm { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .nq-nd .n { flex:none; font-size:10px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+  .nq-nd.on { background:var(--accent-light); color:var(--navy); font-weight:700; }
+  .nq-nd.on .n { color:var(--accent); }
+  .nq-nd.zero { opacity:.33; }
+  .nq-l0 { font-size:10.5px; font-weight:700; letter-spacing:.11em; color:var(--text-muted);
+    padding:13px 11px 5px 7px; cursor:default; }
+  .nq-l0:hover { background:none; }
+  .nq-l1 { font-size:13.5px; font-weight:600; color:var(--text-primary); }
+  .nq-l2 { font-size:12.5px; padding-left:25px; }
+  .nq-l3 { font-size:12px; color:var(--text-muted); padding-left:42px; }
+
+  .nq-main { display:flex; flex-direction:column; min-height:0; background:var(--surface); }
+  .nq-mh { flex:none; display:flex; align-items:center; gap:10px; padding:10px 16px;
+    border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .nq-bc { display:flex; align-items:center; gap:6px; font-size:12.5px; flex-wrap:wrap; min-width:0; }
+  .nq-bc .x { display:inline-flex; align-items:center; gap:5px; background:var(--accent-light);
+    color:var(--navy); border:1px solid #cddcf3; border-radius:20px; padding:2px 5px 2px 10px;
+    font-weight:600; font-size:12px; }
+  .nq-bc .x button { font-family:inherit; border:none; background:none; color:var(--accent);
+    cursor:pointer; font-size:13px; line-height:1; padding:2px 3px; border-radius:50%; }
+  .nq-bc .x button:hover { background:#cddcf3; }
+  .nq-bc .all { color:var(--text-muted); }
+  .nq-mh .sp { flex:1; }
+  .nq-cnt { font-size:12.5px; color:var(--text-secondary); white-space:nowrap;
+    font-variant-numeric:tabular-nums; }
+  .nq-cnt b { font-size:15px; color:var(--accent); font-weight:700; }
+  .nq-mini { font-family:inherit; font-size:11.5px; font-weight:600; color:var(--text-muted);
+    background:var(--surface); border:1px solid var(--border); border-radius:4px;
+    padding:4px 9px; cursor:pointer; white-space:nowrap; }
+  .nq-mini:hover { border-color:var(--accent); color:var(--accent); }
+  .nq-list { flex:1; overflow-y:auto; overscroll-behavior:contain; }
+
+  .nq-it { border-bottom:1px solid #f0f2f5; }
+  .nq-it.open { background:#fafbfc; }
+  .nq-hb { display:grid; grid-template-columns:48px 1fr; gap:12px; width:100%; text-align:left;
+    background:none; border:none; font-family:inherit; color:inherit; cursor:pointer;
+    padding:11px 18px 11px 10px; border-left:3px solid transparent; }
+  .nq-hb:hover { background:var(--accent-light); }
+  .nq-it.cur .nq-hb { border-left-color:var(--accent); background:var(--accent-light); }
+  .nq-no { font-size:10.5px; color:var(--text-muted); text-align:right; padding-top:3px;
+    font-variant-numeric:tabular-nums; }
+  .nq-tt { display:block; font-size:14.5px; font-weight:600; line-height:1.45; }
+  .nq-sn { display:block; font-size:12.5px; color:var(--text-secondary); line-height:1.5;
+    margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .nq-it.open .nq-sn { display:none; }
+  .nq-cr { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:6px;
+    font-size:11px; color:var(--text-muted); }
+  .nq-cr .tg { font-weight:700; color:var(--accent); background:var(--accent-light);
+    border-radius:3px; padding:1px 6px; }
+  .nq-cr .tg.b { color:#8a5a12; background:#fdf2dc; }
+  .nq-cr .lw { margin-left:auto; font-size:9.5px; color:var(--text-muted);
+    border:1px solid var(--border); border-radius:2px; padding:0 4px; }
+
+  .nq-bd { padding:0 22px 18px 73px; }
+  .nq-fl { font-size:10px; font-weight:700; letter-spacing:.14em; color:var(--text-muted); margin:0 0 6px; }
+  .nq-qt { margin:0 0 16px; white-space:pre-wrap; font-size:14px; line-height:1.65;
+    border-left:2px solid var(--border); padding-left:12px; }
+  .nq-at { margin:0 0 16px; white-space:pre-wrap; font-size:14.5px; line-height:1.75; }
+  .nq-lw { margin:0; white-space:pre-wrap; font-size:12px; line-height:1.6; color:var(--text-secondary);
+    background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:9px 12px; }
+  .nq-acts { display:flex; gap:8px; margin-top:14px; }
+  .nq-act { font-family:inherit; font-size:12px; font-weight:600; color:var(--text-secondary);
+    background:var(--surface); border:1px solid var(--border); border-radius:6px;
+    padding:5px 11px; cursor:pointer; }
+  .nq-act:hover { border-color:var(--accent); color:var(--accent); }
+  .nq-act.done { color:var(--green-text); border-color:var(--green-text); }
+  .nq-list mark { background:#ffe082; color:inherit; padding:.04em .12em; border-radius:2px;
+    -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+
+  .nq-more { display:block; width:100%; padding:12px; font-family:inherit; font-size:13px;
+    font-weight:600; color:var(--text-secondary); background:#fafbfc; border:none;
+    border-bottom:1px solid #f0f2f5; cursor:pointer; }
+  .nq-more:hover { background:var(--accent-light); color:var(--accent); }
+  .nq-msg { padding:56px 24px; text-align:center; }
+  .nq-msg h3 { font-size:16px; font-weight:600; margin:0 0 7px; }
+  .nq-msg p { margin:0; font-size:13px; color:var(--text-muted); line-height:1.65; }
+
+  @media (max-width:900px) {
+    .nq-wrap { height:auto; }
+    .nq-body { grid-template-columns:1fr; }
+    .nq-side { border-right:none; border-bottom:1px solid var(--border); }
+    .nq-tree { max-height:230px; }
+    .nq-list { max-height:520px; }
+    .nq-bd { padding:0 14px 16px 14px; }
+  }
 </style>
 </head>
 <body>
@@ -291,7 +420,8 @@ const CATEGORIES = [
       { id: 'net2gross', name: '세전급여 역산 계산기', desc: '넷급여(실수령액) 기준으로 세전 총급여를 역산합니다.', tag: '2026년 기준' }
   ]},
   { id: 'tax', label: '세무', icon: '\ud83d\udcc4', tools: [
-      { id: 'onboarding', name: '기장거래처 수임 후속절차', desc: '신규 수임 시 받아야 할 서류와 작성해야 할 위임서류 4종을 안내하고, 통합 서식을 내려받습니다.', tag: '신규수임 체크리스트' }
+      { id: 'onboarding', name: '기장거래처 수임 후속절차', desc: '신규 수임 시 받아야 할 서류와 작성해야 할 위임서류 4종을 안내하고, 통합 서식을 내려받습니다.', tag: '신규수임 체크리스트' },
+      { id: 'ntsqa', name: '국세상담센터 Q&A 색인', desc: '국세상담센터 자주묻는 문답 3,636건을 세목·카테고리·중분류 트리로 탐색하고 본문까지 검색합니다.', tag: '2026.8.14 수집 · 3,636건' }
   ]},
   { id: 'acct', label: '회계', icon: '\ud83d\udcca', tools: [] },
 ];
@@ -336,6 +466,14 @@ function renderContent() {
     crumb.textContent = '인사/노무 > 세전급여 역산 계산기';
     content.innerHTML = renderNet2GrossTool();
     initNet2Gross();
+    return;
+  }
+
+  if (currentTool === 'ntsqa') {
+    title.textContent = '국세상담센터 Q&A 색인';
+    crumb.textContent = '세무 > 국세상담센터 Q&A 색인';
+    content.innerHTML = renderNtsQaTool();
+    initNtsQa();
     return;
   }
 
@@ -694,6 +832,352 @@ function dlSuimXlsx() {
     alert('다운로드에 실패했습니다: ' + e.message);
   }
 }
+/* ══ 국세상담센터 자주묻는 Q&A 검색 색인 ══ */
+const NQ = {
+  D:null, TXT:null, TTL:null, CHOI:null, TG:{}, TS:{}, TC:{},
+  st:{q:'',g:-1,s:-1,c:-1,m:-1,shown:60,cur:-1,only:false},
+  exp:{}, open:{}, res:[], cnt:{}, PAGE:60, tmr:null,
+  CHO:['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ']
+};
+
+function renderNtsQaTool() {
+  return `
+  <div class="tool-detail">
+    <button class="back-btn" onclick="selectCategory('tax')">\u2190 세무로 돌아가기</button>
+    <div class="nq-wrap">
+      <div class="nq-bar">
+        <div class="nq-search">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="9" cy="9" r="6.2"/><path d="M13.6 13.6 18 18" stroke-linecap="round"/></svg>
+          <input id="nqQ" type="search" autocomplete="off" spellcheck="false"
+            placeholder="세금계산서 지연발급 가산세 …" aria-label="검색어">
+        </div>
+        <div class="nq-stamp">수집<b>2026.8.14</b></div>
+      </div>
+      <div class="nq-tips">
+        <span><b>띄어쓰기</b>로 여러 낱말 모두 포함</span>
+        <span><b>초성</b>만 입력해도 검색 (ㅅㄱㄱㅅㅅ → 세금계산서)</span>
+        <span><b>\u2191\u2193</b> 이동 · <b>Enter</b> 펼치기</span>
+      </div>
+      <div class="nq-body">
+        <aside class="nq-side">
+          <div class="nq-sh"><span class="l">분류 탐색</span><span class="sp"></span>
+            <button class="nq-tgl" id="nqOnly" aria-pressed="false">결과 있는 분류만</button></div>
+          <div class="nq-tree" id="nqTree"></div>
+        </aside>
+        <main class="nq-main">
+          <div class="nq-mh"><div class="nq-bc" id="nqBc"></div><span class="sp"></span>
+            <span class="nq-cnt" id="nqCnt"></span>
+            <button class="nq-mini" id="nqCollapse">모두 접기</button></div>
+          <div class="nq-list" id="nqList"></div>
+        </main>
+      </div>
+    </div>
+  </div>`;
+}
+
+function initNtsQa() {
+  const list = document.getElementById('nqList');
+  if (window.NTS_QA) { nqBoot(); return; }
+  list.innerHTML = '<div class="nq-msg"><h3>자료를 불러오는 중입니다</h3><p>국세상담센터 문답 3,636건 (약 2MB)</p></div>';
+  const s = document.createElement('script');
+  s.src = 'nts_qa.js';
+  s.onload = () => { if (document.getElementById('nqList')) nqBoot(); };
+  s.onerror = () => {
+    if (!document.getElementById('nqList')) return;
+    document.getElementById('nqList').innerHTML =
+      '<div class="nq-msg"><h3>자료 파일을 찾을 수 없습니다</h3>' +
+      '<p>index.html과 같은 폴더에 <b>nts_qa.js</b> 파일이 있어야 합니다.<br>' +
+      '저장소에 함께 올렸는지 확인해 주세요.</p></div>';
+  };
+  document.body.appendChild(s);
+}
+
+function nqBoot() {
+  const D = window.NTS_QA;
+  NQ.D = D;
+  const R = D.r, N = R.length;
+  if (!NQ.TXT) {
+    NQ.TXT = new Array(N); NQ.TTL = new Array(N);
+    for (let i = 0; i < N; i++) {
+      const r = R[i], h = r[5] + ' ' + r[6];
+      NQ.TTL[i] = h.toLowerCase();
+      NQ.TXT[i] = (h + ' ' + r[7] + ' ' + r[8] + ' ' + (r[2] >= 0 ? D.s[r[2]] : '') + ' ' +
+        (r[3] >= 0 ? D.c[r[3]] : '') + ' ' + (r[4] >= 0 ? D.m[r[4]] : '')).toLowerCase();
+    }
+    const a = {}, b = {}, cc = {};
+    for (let i = 0; i < N; i++) {
+      const r = R[i];
+      (a[r[1]] = a[r[1]] || {})[r[2]] = 1;
+      if (r[2] >= 0 && r[3] >= 0) (b[r[2]] = b[r[2]] || {})[r[3]] = 1;
+      if (r[2] >= 0 && r[3] >= 0 && r[4] >= 0) (cc[r[2] + '|' + r[3]] = cc[r[2] + '|' + r[3]] || {})[r[4]] = 1;
+    }
+    const ks = (o, nm) => Object.keys(o || {}).map(Number)
+      .sort((x, y) => (nm[x] || '').localeCompare(nm[y] || '', 'ko'));
+    Object.keys(a).forEach(g => NQ.TG[g] = ks(a[g], D.s));
+    Object.keys(b).forEach(s => NQ.TS[s] = ks(b[s], D.c));
+    Object.keys(cc).forEach(k => NQ.TC[k] = ks(cc[k], D.m));
+  }
+  NQ.st = {q:'',g:-1,s:-1,c:-1,m:-1,shown:NQ.PAGE,cur:-1,only:false};
+  NQ.exp = {}; NQ.open = {};
+  nqBind();
+  nqRun();
+}
+
+function nqEsc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function nqRxe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function nqTerms(){return NQ.st.q.trim().toLowerCase().split(/\s+/).filter(Boolean);}
+function nqIsCho(t){if(!t.length)return false;for(const ch of t)if(NQ.CHO.indexOf(ch)<0)return false;return true;}
+function nqChoMode(t){return t.length>0&&t.every(nqIsCho);}
+function nqBuildCho(){
+  if (NQ.CHOI) return;
+  const R = NQ.D.r; NQ.CHOI = new Array(R.length);
+  for (let k = 0; k < R.length; k++) {
+    const s = R[k][5] + R[k][6]; let o = '';
+    for (let j = 0; j < s.length; j++) {
+      const c = s.charCodeAt(j);
+      if (c >= 0xAC00 && c <= 0xD7A3) o += NQ.CHO[Math.floor((c - 0xAC00) / 588)];
+      else if (c > 32) o += s[j];
+    }
+    NQ.CHOI[k] = o.toLowerCase();
+  }
+}
+
+function nqRun() {
+  const D = NQ.D, R = D.r, N = R.length, st = NQ.st;
+  const t = nqTerms(), cm = nqChoMode(t);
+  if (cm) nqBuildCho();
+  NQ.cnt = {};
+  const add = k => NQ.cnt[k] = (NQ.cnt[k] || 0) + 1;
+  const out = [];
+  for (let i = 0; i < N; i++) {
+    if (t.length) {
+      const hay = cm ? NQ.CHOI[i] : NQ.TXT[i];
+      let ok = true;
+      for (let j = 0; j < t.length; j++) if (hay.indexOf(t[j]) < 0) { ok = false; break; }
+      if (!ok) continue;
+    }
+    const r = R[i];
+    add('g' + r[1]);
+    if (r[2] >= 0) add('s' + r[2]);
+    if (r[2] >= 0 && r[3] >= 0) add('c' + r[2] + '|' + r[3]);
+    if (r[2] >= 0 && r[3] >= 0 && r[4] >= 0) add('m' + r[2] + '|' + r[3] + '|' + r[4]);
+    if (st.g >= 0 && r[1] !== st.g) continue;
+    if (st.s >= 0 && r[2] !== st.s) continue;
+    if (st.c >= 0 && r[3] !== st.c) continue;
+    if (st.m >= 0 && r[4] !== st.m) continue;
+    if (t.length && !cm) {
+      let sc = 0;
+      for (let j = 0; j < t.length; j++) { const hp = NQ.TTL[i].indexOf(t[j]); sc += hp >= 0 ? (hp === 0 ? 60 : 34) : 8; }
+      out.push([i, sc]);
+    } else out.push([i, 0]);
+  }
+  if (t.length && !cm) out.sort((a, b) => b[1] - a[1] || a[0] - b[0]);
+  NQ.res = out.map(x => x[0]);
+  st.shown = NQ.PAGE; st.cur = -1; NQ.open = {};
+  nqPaintTree(); nqPaintHead(); nqPaintList();
+}
+
+function nqNode(lv, key, name, n, on, kid, attrs) {
+  if (NQ.st.only && !n) return '';
+  return '<button class="nq-nd nq-l' + lv + (NQ.exp[key] ? ' op' : '') + (on ? ' on' : '') +
+    (n ? '' : ' zero') + '" ' + attrs + '><span class="cv">' + (kid ? '\u25B6' : '') +
+    '</span><span class="nm">' + nqEsc(name) + '</span><span class="n">' + (n || 0).toLocaleString() +
+    '</span></button>';
+}
+function nqPaintTree() {
+  const D = NQ.D, st = NQ.st; let h = '';
+  Object.keys(NQ.TG).map(Number).sort().forEach(g => {
+    h += '<div class="nq-nd nq-l0">' + nqEsc(D.g[g]) + '</div>';
+    NQ.TG[g].forEach(s => {
+      if (s < 0) return;
+      h += nqNode(1, 's' + s, D.s[s], NQ.cnt['s' + s] || 0, st.s === s && st.c < 0,
+        (NQ.TS[s] || []).length > 0, 'data-s="' + s + '" data-g="' + g + '"');
+      if (!NQ.exp['s' + s]) return;
+      (NQ.TS[s] || []).forEach(c => {
+        const mk = NQ.TC[s + '|' + c] || [];
+        h += nqNode(2, 'c' + s + '|' + c, D.c[c], NQ.cnt['c' + s + '|' + c] || 0,
+          st.s === s && st.c === c && st.m < 0, mk.length > 0,
+          'data-s="' + s + '" data-g="' + g + '" data-c="' + c + '"');
+        if (!NQ.exp['c' + s + '|' + c]) return;
+        mk.forEach(m => {
+          h += nqNode(3, 'm' + s + '|' + c + '|' + m, D.m[m], NQ.cnt['m' + s + '|' + c + '|' + m] || 0,
+            st.s === s && st.c === c && st.m === m, false,
+            'data-s="' + s + '" data-g="' + g + '" data-c="' + c + '" data-m="' + m + '"');
+        });
+      });
+    });
+  });
+  document.getElementById('nqTree').innerHTML = h;
+}
+function nqPaintHead() {
+  const D = NQ.D, st = NQ.st;
+  const pill = (l, lv) => '<span class="x"><b>' + nqEsc(l) + '</b><button data-clr="' + lv + '" title="해제">\u00D7</button></span>';
+  let b = '';
+  if (st.g >= 0) b += pill(D.g[st.g], 'g');
+  if (st.s >= 0) b += pill(D.s[st.s], 's');
+  if (st.c >= 0) b += pill(D.c[st.c], 'c');
+  if (st.m >= 0) b += pill(D.m[st.m], 'm');
+  document.getElementById('nqBc').innerHTML = b || '<span class="all">전체 분류</span>';
+  document.getElementById('nqCnt').innerHTML = '<b>' + NQ.res.length.toLocaleString() + '</b>건' +
+    (nqTerms().length ? ' 검색됨' : '');
+}
+function nqHl(s) {
+  const t = nqTerms(), o = nqEsc(s);
+  if (!t.length || nqChoMode(t)) return o;
+  return o.replace(new RegExp('(' + t.map(nqRxe).sort((a, b) => b.length - a.length).join('|') + ')', 'gi'), '<mark>$1</mark>');
+}
+function nqCrumb(r) {
+  const D = NQ.D, st = NQ.st;
+  let h = '<span class="tg' + (r[1] === 0 ? ' b' : '') + '">' + nqEsc(D.g[r[1]]) + '</span>';
+  const p = [];
+  if (r[2] >= 0 && st.s < 0) p.push(D.s[r[2]]);
+  if (r[3] >= 0 && st.c < 0) p.push(D.c[r[3]]);
+  if (r[4] >= 0 && st.m < 0) p.push(D.m[r[4]]);
+  p.forEach((x, k) => h += (k ? '<span>\u203A</span>' : '') + '<span>' + nqEsc(x) + '</span>');
+  if (r[8]) h += '<span class="lw">근거</span>';
+  return h;
+}
+function nqDetail(r) {
+  let h = '<p class="nq-fl">질문</p><p class="nq-qt">' + nqHl(r[6]) + '</p>' +
+    '<p class="nq-fl">답변</p><p class="nq-at">' + nqHl(r[7]) + '</p>';
+  if (r[8]) h += '<p class="nq-fl">근거법령 · 해석사례</p><p class="nq-lw">' + nqHl(r[8]) + '</p>';
+  return h + '<div class="nq-acts"><button class="nq-act" data-cp="a">답변 복사</button>' +
+    '<button class="nq-act" data-cp="qa">질문+답변 복사</button></div>';
+}
+function nqRows(from, to) {
+  const R = NQ.D.r; let h = '';
+  for (let k = from; k < to; k++) {
+    const i = NQ.res[k], r = R[i], op = NQ.open[i];
+    h += '<div class="nq-it' + (op ? ' open' : '') + '" data-k="' + k + '" data-i="' + i + '">' +
+      '<button class="nq-hb" aria-expanded="' + (op ? 'true' : 'false') + '"><span class="nq-no">' + r[0] +
+      '</span><span><span class="nq-tt">' + nqHl(r[5]) + '</span><span class="nq-sn">' + nqHl(r[6]) +
+      '</span><span class="nq-cr">' + nqCrumb(r) + '</span></span></button>' +
+      (op ? '<div class="nq-bd">' + nqDetail(r) + '</div>' : '') + '</div>';
+  }
+  return h;
+}
+function nqTail() {
+  return NQ.res.length > NQ.st.shown
+    ? '<button class="nq-more" id="nqMore">다음 ' + Math.min(NQ.PAGE, NQ.res.length - NQ.st.shown).toLocaleString() +
+      '건 더 보기 · 남은 ' + (NQ.res.length - NQ.st.shown).toLocaleString() + '건</button>' : '';
+}
+function nqPaintList() {
+  const el = document.getElementById('nqList');
+  if (!NQ.res.length) {
+    el.innerHTML = '<div class="nq-msg"><h3>해당하는 문답이 없습니다</h3>' +
+      '<p>낱말 수를 줄이거나 위쪽 분류 태그의 \u00D7를 눌러 범위를 넓혀 보세요.</p></div>';
+    return;
+  }
+  el.innerHTML = nqRows(0, Math.min(NQ.st.shown, NQ.res.length)) + nqTail();
+}
+function nqRepaintRow(k) {
+  const el = document.querySelector('.nq-it[data-k="' + k + '"]');
+  if (!el) return;
+  const t = document.createElement('div');
+  t.innerHTML = nqRows(k, k + 1);
+  el.replaceWith(t.firstChild);
+}
+function nqMarkCur() {
+  document.querySelectorAll('.nq-it').forEach(x => x.classList.toggle('cur', +x.dataset.k === NQ.st.cur));
+}
+
+function nqBind() {
+  const q = document.getElementById('nqQ');
+  q.addEventListener('input', () => {
+    clearTimeout(NQ.tmr);
+    NQ.tmr = setTimeout(() => { NQ.st.q = q.value; nqRun(); }, 90);
+  });
+  document.getElementById('nqTree').addEventListener('click', e => {
+    const b = e.target.closest('.nq-nd');
+    if (!b || b.classList.contains('nq-l0')) return;
+    const d = b.dataset, st = NQ.st;
+    let key, lvl;
+    if (d.m !== undefined) { key = 'm' + d.s + '|' + d.c + '|' + d.m; lvl = 3; }
+    else if (d.c !== undefined) { key = 'c' + d.s + '|' + d.c; lvl = 2; }
+    else { key = 's' + d.s; lvl = 1; }
+    const same = (lvl === 1 && st.s === +d.s && st.c < 0) ||
+      (lvl === 2 && st.s === +d.s && st.c === +d.c && st.m < 0) ||
+      (lvl === 3 && st.s === +d.s && st.c === +d.c && st.m === +d.m);
+    if (same) { NQ.exp[key] ? delete NQ.exp[key] : NQ.exp[key] = 1; }
+    else {
+      st.g = +d.g; st.s = +d.s;
+      st.c = lvl >= 2 ? +d.c : -1;
+      st.m = lvl >= 3 ? +d.m : -1;
+      if (lvl < 3) NQ.exp[key] = 1;
+      if (lvl >= 2) NQ.exp['s' + d.s] = 1;
+    }
+    nqRun();
+  });
+  document.getElementById('nqBc').addEventListener('click', e => {
+    const b = e.target.closest('[data-clr]'); if (!b) return;
+    const lv = b.dataset.clr, st = NQ.st;
+    if (lv === 'g' || lv === 's') { st.g = -1; st.s = -1; st.c = -1; st.m = -1; }
+    if (lv === 'c') { st.c = -1; st.m = -1; }
+    if (lv === 'm') { st.m = -1; }
+    nqRun();
+  });
+  document.getElementById('nqList').addEventListener('click', e => {
+    const cp = e.target.closest('[data-cp]');
+    if (cp) {
+      const r = NQ.D.r[+cp.closest('.nq-it').dataset.i];
+      const txt = cp.dataset.cp === 'a' ? r[7]
+        : '[질문] ' + r[6] + '\n\n[답변] ' + r[7] + (r[8] ? '\n\n[근거] ' + r[8] : '');
+      navigator.clipboard.writeText(txt).then(() => {
+        const o = cp.textContent;
+        cp.textContent = '복사되었습니다'; cp.classList.add('done');
+        setTimeout(() => { cp.textContent = o; cp.classList.remove('done'); }, 1400);
+      });
+      return;
+    }
+    if (e.target.closest('#nqMore')) {
+      const from = NQ.st.shown;
+      NQ.st.shown = Math.min(NQ.res.length, NQ.st.shown + NQ.PAGE);
+      const m = document.getElementById('nqMore');
+      m.insertAdjacentHTML('beforebegin', nqRows(from, NQ.st.shown));
+      if (NQ.res.length <= NQ.st.shown) m.remove(); else m.outerHTML = nqTail();
+      nqPaintHead();
+      return;
+    }
+    const hb = e.target.closest('.nq-hb'); if (!hb) return;
+    const it = hb.closest('.nq-it'), i = +it.dataset.i, k = +it.dataset.k;
+    NQ.open[i] ? delete NQ.open[i] : NQ.open[i] = 1;
+    NQ.st.cur = k; nqRepaintRow(k); nqMarkCur();
+  });
+  document.getElementById('nqCollapse').addEventListener('click', () => {
+    NQ.open = {}; nqPaintList(); nqMarkCur();
+  });
+  document.getElementById('nqOnly').addEventListener('click', function () {
+    NQ.st.only = !NQ.st.only;
+    this.setAttribute('aria-pressed', String(NQ.st.only));
+    nqPaintTree();
+  });
+  if (!window.__nqKeys) {
+    window.__nqKeys = 1;
+    document.addEventListener('keydown', e => {
+      if (currentTool !== 'ntsqa') return;
+      const q = document.getElementById('nqQ'); if (!q) return;
+      if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); q.select(); return; }
+      if (e.key === 'Escape') { q.value = ''; NQ.st.q = ''; nqRun(); q.blur(); return; }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        const max = Math.min(NQ.st.shown, NQ.res.length) - 1; if (max < 0) return;
+        e.preventDefault();
+        NQ.st.cur = e.key === 'ArrowDown' ? Math.min(max, NQ.st.cur + 1) : Math.max(0, NQ.st.cur - 1);
+        nqMarkCur();
+        const el = document.querySelector('.nq-it[data-k="' + NQ.st.cur + '"]');
+        if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+        if (document.activeElement === q) q.blur();
+        return;
+      }
+      if (e.key === 'Enter' && NQ.st.cur >= 0 && document.activeElement !== q) {
+        const el = document.querySelector('.nq-it[data-k="' + NQ.st.cur + '"]');
+        if (el) { e.preventDefault(); const i = +el.dataset.i;
+          NQ.open[i] ? delete NQ.open[i] : NQ.open[i] = 1; nqRepaintRow(NQ.st.cur); nqMarkCur(); }
+      }
+    });
+  }
+}
+
 </script>
 </body>
 </html>
