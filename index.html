@@ -709,7 +709,8 @@ function getIncomeTax(taxable, famIdx) {
 
 function calcInsurance(gross, nonex, isCeo=false) {
   const tx = Math.max(gross - nonex, 0);
-  const np = floor10(Math.min(tx, 6170000) * 0.0475);
+  const std = Math.floor(Math.min(tx, 6170000) / 1000) * 1000;
+  const np = floor10(std * 0.0475);
   const hi = floor10(tx * 0.03595);
   const li = floor10(hi * 0.1314);
   const ei = isCeo ? 0 : floor10(tx * 0.009);
