@@ -391,6 +391,38 @@
     .nq-list { max-height:520px; }
     .nq-bd { padding:0 14px 16px 14px; }
   }
+
+  /* ===== 소득자별 PDF 분할 ===== */
+  .ps-drop { display:block; margin:18px 22px; border:1.5px dashed #b9c3d6; border-radius:10px; background:#fafbfc;
+    padding:34px 20px; text-align:center; cursor:pointer; transition:border-color .15s, background .15s; }
+  .ps-drop:hover, .ps-drop.on { border-color:var(--accent); background:var(--accent-light); }
+  .ps-drop strong { display:block; font-size:14.5px; font-weight:600; color:var(--navy); margin-bottom:5px; }
+  .ps-drop span { font-size:12.5px; color:var(--text-muted); }
+  .ps-drop input { display:none; }
+  .ps-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:14px 22px; border-bottom:1px solid var(--border); }
+  .ps-stat { margin-right:auto; font-size:13px; color:var(--text-secondary); }
+  .ps-stat b { color:var(--text-primary); font-weight:600; }
+  .ps-stat .w { color:#b5532a; font-weight:600; }
+  .ps-btn { font-family:inherit; font-size:13px; font-weight:500; border:1px solid var(--border); background:var(--surface);
+    color:var(--text-primary); border-radius:7px; padding:8px 14px; cursor:pointer; }
+  .ps-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .ps-tw { overflow-x:auto; }
+  .ps-table { width:100%; border-collapse:collapse; font-size:13px; min-width:640px; }
+  .ps-table th { text-align:left; font-weight:500; font-size:12px; color:var(--text-secondary); background:#fafbfc;
+    padding:9px 14px; border-bottom:1px solid var(--border); white-space:nowrap; }
+  .ps-table td { padding:7px 14px; border-bottom:1px solid #f0f2f5; vertical-align:middle; }
+  .ps-table tr:last-child td { border-bottom:none; }
+  .ps-table tr.bad td { background:#fdf4ef; }
+  .ps-table td.src { color:var(--text-muted); font-size:12px; max-width:170px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ps-table td.num { color:var(--text-muted); font-variant-numeric:tabular-nums; }
+  .ps-table input { width:100%; font-family:inherit; font-size:13px; border:1px solid var(--border); border-radius:6px; padding:6px 9px; }
+  .ps-table input:focus { outline:none; border-color:var(--accent); }
+  .ps-tag { display:inline-block; font-size:11px; font-weight:600; padding:3px 8px; border-radius:20px; white-space:nowrap; }
+  .ps-tag.ok { background:var(--green-bg); color:var(--green-text); }
+  .ps-tag.no { background:#fbe7dc; color:#b5532a; }
+  .ps-msg { padding:0 22px 14px; font-size:12.5px; color:var(--text-muted); }
+  .ps-msg:empty { display:none; }
+  .ps-hide { display:none !important; }
 </style>
 </head>
 <body>
@@ -420,8 +452,9 @@ const TAX_TABLE = [[770, 775, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [775, 780, 0, 0,
 
 const CATEGORIES = [
   { id: 'all', label: '전체', icon: '\ud83d\udcc1', tools: [] },
-  { id: 'hr', label: '인사/노무', icon: '\ud83d\udc65', tools: [
-      { id: 'net2gross', name: '세전급여 역산 계산기', desc: '넷급여(실수령액) 기준으로 세전 총급여를 역산합니다.', tag: '2026년 기준' }
+  { id: 'hr', label: '인사/노무/급여', icon: '\ud83d\udc65', tools: [
+      { id: 'net2gross', name: '세전급여 역산 계산기', desc: '넷급여(실수령액) 기준으로 세전 총급여를 역산합니다.', tag: '2026년 기준' },
+      { id: 'pdfsplit', name: '소득자별 PDF 분할', desc: '여러 쪽짜리 소득자별소득합계표를 한 쪽씩 나눠 성명_귀속연월.pdf로 저장하고 ZIP으로 내려받습니다.', tag: '브라우저 내 처리 · 외부 전송 없음' }
   ]},
   { id: 'tax', label: '세무', icon: '\ud83d\udcc4', tools: [
       { id: 'onboarding', name: '기장거래처 수임 후속절차', desc: '신규 수임 시 받아야 할 서류와 작성해야 할 위임서류 4종을 안내하고, 통합 서식을 내려받습니다.', tag: '신규수임 체크리스트' },
@@ -467,7 +500,7 @@ function renderContent() {
 
   if (currentTool === 'net2gross') {
     title.textContent = '세전급여 역산 계산기';
-    crumb.textContent = '인사/노무 > 세전급여 역산 계산기';
+    crumb.textContent = '인사/노무/급여 > 세전급여 역산 계산기';
     content.innerHTML = renderNet2GrossTool();
     initNet2Gross();
     return;
@@ -478,6 +511,14 @@ function renderContent() {
     crumb.textContent = '세무 > 국세상담센터 Q&A 색인';
     content.innerHTML = renderNtsQaTool();
     initNtsQa();
+    return;
+  }
+
+  if (currentTool === 'pdfsplit') {
+    title.textContent = '소득자별 PDF 분할';
+    crumb.textContent = '인사/노무/급여 > 소득자별 PDF 분할';
+    content.innerHTML = renderPdfSplitTool();
+    initPdfSplit();
     return;
   }
 
@@ -518,7 +559,7 @@ function renderContent() {
 function renderNet2GrossTool() {
   return `
   <div class="tool-detail">
-    <button class="back-btn" onclick="selectCategory('hr')">\u2190 인사/노무로 돌아가기</button>
+    <button class="back-btn" onclick="selectCategory('hr')">\u2190 인사/노무/급여로 돌아가기</button>
 
     <div class="tabs">
       <div class="tab active" data-tab="rate" onclick="switchTab('rate')">요율 기준 역산</div>
@@ -1190,6 +1231,199 @@ function nqBind() {
       }
     });
   }
+}
+
+
+/* ===== 소득자별 PDF 분할 ===== */
+const PS_LIBS = [
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'
+];
+// 서식별 성명 추출 규칙 — 새 서식은 여기에 한 줄씩 추가
+const PS_NAME_RULES = [
+  /⑨\s*성\s*명\s*([가-힣A-Za-z]{2,})/,          // 소득자별소득합계표(사업)
+  /소득자[\s\S]{0,60}?성\s*명\s*([가-힣]{2,})/    // 일반 fallback
+];
+const PS_MONTH_RULE = /(?:^|\s)(\d{4})-(\d{2})\s+\d{4}-\d{2}-\d{2}/gm;  // 귀속년월 + 지급년월일 행
+let psRows = [];
+let psLibPromise = null;
+
+function psLoadLibs() {
+  if (psLibPromise) return psLibPromise;
+  psLibPromise = PS_LIBS.reduce((p, src) => p.then(() => new Promise((res, rej) => {
+    const el = document.createElement('script');
+    el.src = src; el.onload = res; el.onerror = () => rej(new Error('라이브러리 로드 실패: ' + src));
+    document.head.appendChild(el);
+  })), Promise.resolve()).then(() => {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  });
+  psLibPromise.catch(() => { psLibPromise = null; });
+  return psLibPromise;
+}
+
+function renderPdfSplitTool() {
+  return `
+  <div class="tool-detail">
+    <button class="back-btn" onclick="selectCategory('hr')">\u2190 인사/노무/급여로 돌아가기</button>
+    <div class="note-box">여러 쪽짜리 소득자별소득합계표를 한 쪽씩 나눠 <b>성명_귀속연월.pdf</b>로 저장합니다. 파일은 이 브라우저 안에서만 처리되고 외부로 전송되지 않습니다.</div>
+    <div class="calc-card">
+      <div class="calc-card-header">PDF 올리기</div>
+      <div class="calc-card-sub">여러 파일 동시 선택 가능 · 동명이인은 _2, _3 자동 부여 · 성명 미인식 쪽은 ‘확인필요’로 표시</div>
+      <label class="ps-drop" id="psDrop">
+        <strong>PDF를 끌어다 놓거나 클릭해서 선택</strong>
+        <span>소득자별소득합계표(사업) 기준</span>
+        <input type="file" id="psFile" accept="application/pdf" multiple>
+      </label>
+      <div class="ps-msg" id="psMsg"></div>
+    </div>
+    <div class="calc-card ps-hide" id="psResult">
+      <div class="calc-card-header">분할 결과</div>
+      <div class="ps-bar">
+        <div class="ps-stat" id="psStat"></div>
+        <button type="button" class="ps-btn" id="psReset">초기화</button>
+        <button type="button" class="dl-btn" id="psZip">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 19h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          ZIP 내려받기
+        </button>
+      </div>
+      <div class="ps-tw">
+        <table class="ps-table">
+          <thead><tr><th>원본</th><th>쪽</th><th>성명</th><th>귀속연월</th><th style="width:34%">파일명 (수정 가능)</th><th>상태</th></tr></thead>
+          <tbody id="psBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+// pdf.js가 글자 단위로 쪼개 주는 텍스트를 줄 단위로 재조립
+function psToLines(items) {
+  const rs = [];
+  for (const it of items) {
+    if (!it.str) continue;
+    const x = it.transform[4], y = it.transform[5];
+    let r = rs.find(r => Math.abs(r.y - y) < 2);
+    if (!r) { r = { y, a: [] }; rs.push(r); }
+    r.a.push({ x, w: it.width || 0, s: it.str });
+  }
+  rs.sort((a, b) => b.y - a.y);
+  return rs.map(r => {
+    r.a.sort((p, q) => p.x - q.x);
+    let o = '', end = null;
+    for (const c of r.a) {
+      if (end !== null && c.x - end > 3 && !o.endsWith(' ') && c.s !== ' ') o += ' ';
+      o += c.s; end = c.x + c.w;
+    }
+    return o.replace(/\s+/g, ' ').trim();
+  }).join('\n');
+}
+function psFindName(t) {
+  for (const re of PS_NAME_RULES) { const m = t.match(re); if (m) return m[1]; }
+  return '';
+}
+function psFindMonth(t) {
+  const ms = [...new Set([...t.matchAll(PS_MONTH_RULE)].map(m => m[1] + m[2]))].sort();
+  if (!ms.length) return '';
+  return ms.length === 1 ? ms[0] : ms[0] + '-' + ms[ms.length - 1];
+}
+const psClean = s => s.replace(/[\\/:*?"<>|]/g, '').trim();
+const psEsc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+
+function psAssignNames() {
+  const seen = {};
+  for (const r of psRows) {
+    if (r.edited) continue;
+    let base = r.name ? (r.month ? `${r.name}_${r.month}` : r.name)
+                      : `확인필요_${r.file.replace(/\.pdf$/i, '')}_p${r.page}`;
+    base = psClean(base);
+    seen[base] = (seen[base] || 0) + 1;
+    r.fname = seen[base] === 1 ? base : `${base}_${seen[base]}`;
+  }
+}
+
+function psRender() {
+  const body = document.getElementById('psBody');
+  if (!body) return;
+  document.getElementById('psResult').classList.toggle('ps-hide', !psRows.length);
+  body.innerHTML = '';
+  psRows.forEach(r => {
+    const tr = document.createElement('tr');
+    if (!r.ok) tr.className = 'bad';
+    tr.innerHTML = `<td class="src" title="${psEsc(r.file)}">${psEsc(r.file)}</td><td class="num">${r.page}</td>
+      <td>${psEsc(r.name || '—')}</td><td class="num">${r.month || '—'}</td>
+      <td><input value="${psEsc(r.fname)}"></td>
+      <td><span class="ps-tag ${r.ok ? 'ok' : 'no'}">${r.ok ? '정상' : '확인필요'}</span></td>`;
+    tr.querySelector('input').addEventListener('input', e => { r.fname = psClean(e.target.value); r.edited = true; });
+    body.appendChild(tr);
+  });
+  const bad = psRows.filter(r => !r.ok).length;
+  document.getElementById('psStat').innerHTML = `총 <b>${psRows.length}</b>쪽` +
+    (bad ? ` · <span class="w">확인필요 ${bad}건</span>` : ' · 모두 인식됨');
+}
+
+async function psHandle(files) {
+  files = [...files].filter(f => f.type === 'application/pdf' || /\.pdf$/i.test(f.name));
+  if (!files.length) return;
+  const msg = document.getElementById('psMsg');
+  msg.textContent = '읽는 중…';
+  try {
+    await psLoadLibs();
+    for (const f of files) {
+      const bytes = new Uint8Array(await f.arrayBuffer());
+      const doc = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
+      for (let i = 1; i <= doc.numPages; i++) {
+        const t = psToLines((await (await doc.getPage(i)).getTextContent()).items);
+        const name = psFindName(t), month = psFindMonth(t);
+        psRows.push({ file: f.name, bytes, page: i, name, month, ok: !!(name && month) });
+      }
+    }
+    psAssignNames(); psRender();
+    msg.textContent = '';
+  } catch (e) {
+    msg.textContent = '오류: ' + e.message;
+  }
+}
+
+async function psMakeZip() {
+  const btn = document.getElementById('psZip');
+  const label = btn.innerHTML;
+  btn.disabled = true; btn.lastChild.textContent = ' 만드는 중…';
+  try {
+    const zip = new JSZip(), cache = new Map(), used = {};
+    for (const r of psRows) {
+      if (!cache.has(r.bytes)) cache.set(r.bytes, await PDFLib.PDFDocument.load(r.bytes));
+      const out = await PDFLib.PDFDocument.create();
+      const [pg] = await out.copyPages(cache.get(r.bytes), [r.page - 1]);
+      out.addPage(pg);
+      let fn = r.fname || `p${r.page}`;
+      used[fn] = (used[fn] || 0) + 1;
+      if (used[fn] > 1) fn += `_${used[fn]}`;
+      zip.file(`${fn}.pdf`, await out.save());
+    }
+    const months = [...new Set(psRows.map(r => r.month).filter(Boolean))];
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(await zip.generateAsync({ type: 'blob' }));
+    a.download = `소득자별분할${months.length === 1 ? '_' + months[0] : ''}.zip`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+  } catch (e) {
+    document.getElementById('psMsg').textContent = '오류: ' + e.message;
+  } finally {
+    btn.disabled = false; btn.innerHTML = label;
+  }
+}
+
+function initPdfSplit() {
+  const drop = document.getElementById('psDrop'), input = document.getElementById('psFile');
+  input.addEventListener('change', e => { psHandle(e.target.files); input.value = ''; });
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('on'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('on'); }));
+  drop.addEventListener('drop', e => psHandle(e.dataTransfer.files));
+  document.getElementById('psZip').addEventListener('click', psMakeZip);
+  document.getElementById('psReset').addEventListener('click', () => { psRows = []; psRender(); });
+  psRender();   // 다른 메뉴 갔다 와도 이전 결과 유지
+  psLoadLibs().catch(() => {});  // 미리 로드
 }
 
 </script>
