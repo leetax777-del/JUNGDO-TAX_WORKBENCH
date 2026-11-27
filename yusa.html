@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>유사매매사례 조회 · 세무회계 정도</title>
+<style>
+  :root { --navy:#16325c; --navy2:#24487e; --line:#d9dfe8; --bg:#f5f7fa; --ink:#1c2430; --mute:#667085;
+          --ok:#0f6b4f; --okbg:#e3f4ec; --warn:#8a5a00; --warnbg:#fdf1d6; --bad:#a12a2a; --badbg:#fbe6e6; --ext:#3b4a8f; --extbg:#e8ebfa; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif; color:var(--ink); background:var(--bg); font-size:14px; line-height:1.55; }
+  header { background:var(--navy); color:#fff; padding:14px 20px; }
+  header h1 { margin:0; font-size:17px; font-weight:700; }
+  header p { margin:2px 0 0; font-size:12px; opacity:.8; }
+  main { max-width:1180px; margin:0 auto; padding:16px 20px 60px; }
+  section, details.card { background:#fff; border:1px solid var(--line); border-radius:8px; padding:16px 18px; margin-bottom:14px; }
+  h2 { margin:0 0 12px; font-size:15px; color:var(--navy); }
+  summary { cursor:pointer; font-weight:700; color:var(--navy); }
+  .row { display:flex; flex-wrap:wrap; gap:12px 16px; align-items:flex-end; }
+  label.f { display:flex; flex-direction:column; gap:4px; font-size:12px; color:var(--mute); }
+  input, select, button { font:inherit; }
+  input[type=text], input[type=date], input[type=number], input[type=password], select { border:1px solid #c3cbd8; border-radius:6px; padding:7px 9px; background:#fff; color:var(--ink); min-width:150px; }
+  input:focus, select:focus { outline:2px solid #9db7e3; outline-offset:0; }
+  button { border:0; border-radius:6px; padding:8px 16px; background:var(--navy); color:#fff; font-weight:700; cursor:pointer; }
+  button:hover { background:var(--navy2); }
+  button.sub { background:#fff; color:var(--navy); border:1px solid var(--navy); }
+  button:disabled { opacity:.5; cursor:default; }
+  .seg { display:inline-flex; border:1px solid var(--navy); border-radius:6px; overflow:hidden; }
+  .seg label { padding:7px 16px; cursor:pointer; color:var(--navy); font-weight:700; }
+  .seg input { position:absolute; opacity:0; }
+  .seg input:checked + span { color:#fff; }
+  .seg label:has(input:checked) { background:var(--navy); color:#fff; }
+  .note { font-size:12px; color:var(--mute); margin:8px 0 0; }
+  .msg { margin-top:10px; padding:9px 12px; border-radius:6px; font-size:13px; display:none; }
+  .msg.err { display:block; background:var(--badbg); color:var(--bad); }
+  .msg.info { display:block; background:#eaf1fb; color:var(--navy); }
+  .periods { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px; margin-top:14px; }
+  .pbox { border:1px solid var(--line); border-radius:6px; padding:9px 12px; }
+  .pbox b { display:block; font-size:12px; color:var(--mute); font-weight:500; }
+  .pbox span { font-variant-numeric:tabular-nums; font-weight:700; }
+  #aptList { width:100%; min-height:190px; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .chip { border:1px solid #c3cbd8; background:#fff; color:var(--ink); font-weight:500; padding:4px 10px; border-radius:999px; font-size:12px; }
+  .chip:hover, .chip.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .sum { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin-bottom:12px; }
+  .sum .pbox span { font-size:16px; }
+  .tw { overflow-x:auto; border:1px solid var(--line); border-radius:6px; }
+  table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  th { background:#eef2f7; color:var(--navy); font-size:12px; text-align:center; padding:8px 10px; border-bottom:1px solid var(--line); position:sticky; top:0; }
+  td { padding:7px 10px; border-bottom:1px solid #edf0f5; text-align:center; }
+  td.r { text-align:right; } td.l { text-align:left; }
+  tr.near td { background:#fffbe8; }
+  .tag { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px; font-weight:700; }
+  .t-in { background:var(--okbg); color:var(--ok); } .t-ext { background:var(--extbg); color:var(--ext); }
+  .t-warn { background:var(--warnbg); color:var(--warn); } .t-bad { background:var(--badbg); color:var(--bad); }
+  .bar { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0 8px; }
+  .bar h3 { margin:0; font-size:14px; color:var(--navy); }
+  ul.cav { margin:10px 0 0; padding-left:18px; font-size:12px; color:var(--mute); }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>유사매매사례 조회 <span style="font-weight:400;opacity:.75">· 아파트 / 상속세·증여세</span></h1>
+  <p>국토교통부 실거래가 공개자료 기준 후보 사례 추리기용 — 최종 판단은 홈택스·등기부 확인</p>
+</header>
+<main>
+
+<details class="card" id="setup">
+  <summary>설정 (인증키)</summary>
+  <div class="row" style="margin-top:12px">
+    <label class="f" style="flex:1;min-width:280px">공공데이터포털 인증키 (아파트 매매 실거래가 상세 자료)
+      <input type="password" id="key" autocomplete="off" placeholder="마이페이지의 일반 인증키를 붙여넣기">
+    </label>
+    <label class="f" style="flex:1;min-width:240px">중계 주소 (선택 · 직접 호출이 막힐 때만)
+      <input type="text" id="proxy" placeholder="비워두면 직접 호출">
+    </label>
+    <button id="saveKey" class="sub">저장</button>
+  </div>
+  <p class="note">인증키는 이 브라우저에만 저장되고 다른 곳으로 전송되지 않습니다. 조회 요청은 공공데이터포털로만 나갑니다.</p>
+</details>
+
+<section>
+  <h2>1. 조회 조건</h2>
+  <div class="row">
+    <div class="seg" role="radiogroup" aria-label="세목">
+      <label><input type="radio" name="tax" value="inh" checked><span>상속세</span></label>
+      <label><input type="radio" name="tax" value="gift"><span>증여세</span></label>
+    </div>
+    <label class="f"><span id="baseLbl">상속개시일</span><input type="date" id="base"></label>
+    <label class="f">신고일 (선택)<input type="date" id="filed"></label>
+    <label class="f">시·도<select id="sido"></select></label>
+    <label class="f">시·군·구<select id="sgg"></select></label>
+    <label class="f" id="codeWrap" hidden>법정동코드 앞 5자리<input type="text" id="code" inputmode="numeric" maxlength="5" placeholder="예: 26440" style="min-width:110px"></label>
+    <button id="load">거래 불러오기</button>
+  </div>
+  <div class="periods" id="periods" hidden></div>
+  <div class="msg" id="msg1"></div>
+</section>
+
+<section id="step2" hidden>
+  <h2>2. 단지 · 전용면적</h2>
+  <div class="row" style="align-items:flex-start">
+    <div style="flex:2;min-width:300px">
+      <label class="f">단지 검색<input type="text" id="aptQ" placeholder="단지명 또는 동 이름"></label>
+      <select id="aptList" size="8" style="margin-top:6px"></select>
+    </div>
+    <div style="flex:1;min-width:240px">
+      <label class="f">평가대상 전용면적 (㎡)<input type="number" id="area" step="0.01" min="0"></label>
+      <div class="chips" id="areaChips"></div>
+      <label class="f" style="margin-top:12px">평가대상 기준시가 (원 · 선택)<input type="text" id="std" inputmode="numeric" placeholder="공동주택가격"></label>
+      <p class="note" id="stdRange"></p>
+      <label style="display:block;margin-top:10px;font-size:13px"><input type="checkbox" id="showAll"> 면적 5% 초과 사례도 표시</label>
+    </div>
+  </div>
+</section>
+
+<section id="result" hidden>
+  <h2>3. 결과</h2>
+  <div class="sum" id="sum"></div>
+  <div class="bar"><h3>매매 사례</h3><button class="sub" id="copy">표 복사 (엑셀 붙여넣기용)</button></div>
+  <div class="tw"><table id="tbl"></table></div>
+  <div id="cxWrap" hidden>
+    <div class="bar"><h3>해제된 계약 (시가 판단에서 제외)</h3></div>
+    <div class="tw"><table id="cx"></table></div>
+  </div>
+  <ul class="cav">
+    <li>거래된 호의 기준시가는 이 화면에 없습니다. 기준시가 5% 요건과 "기준시가 차이가 가장 작은 주택" 선정은 홈택스에서 확인하세요.</li>
+    <li>기간은 매매계약일 기준입니다. 신고기한의 공휴일 순연은 반영하지 않았습니다.</li>
+    <li>동 정보는 소유권 이전등기가 끝난 거래에만 표시됩니다. 직거래는 특수관계 여부를 따로 확인하세요.</li>
+    <li>실거래 신고는 계약일부터 30일 이내라 최근 거래는 아직 안 올라왔을 수 있습니다.</li>
+  </ul>
+</section>
+
+</main>
+<script>
+(function(){
+"use strict";
+var EP = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev";
+var REGIONS = {
+  "부산": [["강서구","26440"],["금정구","26410"],["기장군","26710"],["남구","26290"],["동구","26170"],["동래구","26260"],["부산진구","26230"],["북구","26320"],["사상구","26530"],["사하구","26380"],["서구","26140"],["수영구","26500"],["연제구","26470"],["영도구","26200"],["중구","26110"],["해운대구","26350"]],
+  "울산": [["남구","31140"],["동구","31170"],["북구","31200"],["울주군","31710"],["중구","31110"]],
+  "경남(일부)": [["김해시","48250"],["양산시","48330"],["창원시 마산합포구","48125"],["창원시 마산회원구","48127"],["창원시 성산구","48123"],["창원시 의창구","48121"],["창원시 진해구","48129"]],
+  "서울": [["강남구","11680"],["강동구","11740"],["강북구","11305"],["강서구","11500"],["관악구","11620"],["광진구","11215"],["구로구","11530"],["금천구","11545"],["노원구","11350"],["도봉구","11320"],["동대문구","11230"],["동작구","11590"],["마포구","11440"],["서대문구","11410"],["서초구","11650"],["성동구","11200"],["성북구","11290"],["송파구","11710"],["양천구","11470"],["영등포구","11560"],["용산구","11170"],["은평구","11380"],["종로구","11110"],["중구","11140"],["중랑구","11260"]],
+  "그 외 (코드 직접 입력)": []
+};
+var $ = function(id){ return document.getElementById(id); };
+var store = { get:function(k){ try { return localStorage.getItem(k) || ""; } catch(e){ return ""; } },
+              set:function(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
+var state = { trades:[], periods:null, loadedFor:"" };
+
+/* ---------- 날짜 ---------- */
+function D(y,m,d){ return new Date(Date.UTC(y,m-1,d)); }
+function parseD(s){ var p = s.split("-"); return D(+p[0],+p[1],+p[2]); }
+function lastDay(y,m){ return new Date(Date.UTC(y,m,0)).getUTCDate(); }
+function addMonths(dt,n){
+  var y = dt.getUTCFullYear(), m = dt.getUTCMonth()+n, d = dt.getUTCDate();
+  var ty = y + Math.floor(m/12), tm = ((m%12)+12)%12 + 1;
+  return D(ty,tm,Math.min(d,lastDay(ty,tm)));
+}
+function monthEndPlus(dt,n){ // 해당 월 말일부터 n개월 되는 날 (말일 기준)
+  var y = dt.getUTCFullYear(), m = dt.getUTCMonth()+n;
+  var ty = y + Math.floor(m/12), tm = ((m%12)+12)%12 + 1;
+  return D(ty,tm,lastDay(ty,tm));
+}
+function fmt(dt){ return dt.getUTCFullYear()+"-"+String(dt.getUTCMonth()+1).padStart(2,"0")+"-"+String(dt.getUTCDate()).padStart(2,"0"); }
+function days(a,b){ return Math.round((a-b)/86400000); }
+function calcPeriods(tax, base){
+  var inh = tax === "inh";
+  var due = monthEndPlus(base, inh ? 6 : 3);
+  return { tax:tax, base:base,
+    start: addMonths(base,-6), end: addMonths(base, inh ? 6 : 3),
+    extStart: addMonths(base,-24), due: due, decide: monthEndPlus(due, inh ? 9 : 6) };
+}
+function classify(c, P, filed){
+  if (c >= P.start && c <= P.end) return (filed && c > filed) ? "after" : "in";
+  if (c >= P.extStart && c < P.start) return "pre";
+  if (c > P.end && c <= P.decide) return "post";
+  return "out";
+}
+var CLS = { in:["평가기간","t-in"], after:["평가기간(신고일 후)","t-warn"], pre:["확장 · 전 2년","t-ext"], post:["확장 · 결정기한까지","t-ext"] };
+
+/* ---------- 표시 ---------- */
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function num(n){ return Number(n).toLocaleString("ko-KR"); }
+function eok(man){ var e = Math.floor(man/10000), r = Math.round(man%10000); return (e ? e+"억 " : "") + (r ? num(r)+"만" : (e ? "" : "0")) + "원"; }
+function msg(text, kind){ var m = $("msg1"); m.className = "msg" + (text ? " "+(kind||"info") : ""); m.textContent = text || ""; }
+
+/* ---------- 초기화 ---------- */
+Object.keys(REGIONS).forEach(function(s){ $("sido").add(new Option(s,s)); });
+function fillSgg(){
+  var list = REGIONS[$("sido").value]; $("sgg").innerHTML = "";
+  list.forEach(function(r){ $("sgg").add(new Option(r[0], r[1])); });
+  var manual = list.length === 0;
+  $("codeWrap").hidden = !manual; $("sgg").parentElement.hidden = manual;
+}
+$("sido").addEventListener("change", fillSgg); fillSgg();
+$("key").value = store.get("yusa.key"); $("proxy").value = store.get("yusa.proxy");
+if (!$("key").value) $("setup").open = true;
+$("saveKey").addEventListener("click", function(){
+  store.set("yusa.key", $("key").value.trim()); store.set("yusa.proxy", $("proxy").value.trim());
+  $("setup").open = false; msg("설정을 저장했습니다.");
+});
+document.querySelectorAll("input[name=tax]").forEach(function(r){ r.addEventListener("change", function(){
+  $("baseLbl").textContent = taxVal() === "inh" ? "상속개시일" : "증여일"; showPeriods();
+});});
+$("base").addEventListener("change", showPeriods);
+$("filed").addEventListener("change", function(){ if (!$("result").hidden) render(); });
+function taxVal(){ return document.querySelector("input[name=tax]:checked").value; }
+
+function showPeriods(){
+  if (!$("base").value) { $("periods").hidden = true; return null; }
+  var P = calcPeriods(taxVal(), parseD($("base").value));
+  $("periods").hidden = false;
+  $("periods").innerHTML =
+    '<div class="pbox"><b>평가기간</b><span>'+fmt(P.start)+' ~ '+fmt(P.end)+'</span></div>' +
+    '<div class="pbox"><b>확장 · 기준일 전 2년 (심의 대상)</b><span>'+fmt(P.extStart)+' ~ '+fmt(addDays(P.start,-1))+'</span></div>' +
+    '<div class="pbox"><b>확장 · 법정결정기한까지 (심의 대상)</b><span>'+fmt(addDays(P.end,1))+' ~ '+fmt(P.decide)+'</span></div>' +
+    '<div class="pbox"><b>신고기한</b><span>'+fmt(P.due)+'</span></div>';
+  return P;
+}
+function addDays(dt,n){ return new Date(dt.getTime()+n*86400000); }
+
+/* ---------- 조회 ---------- */
+function buildUrl(code, ym, page){
+  var k = $("key").value.trim();
+  if (!/%[0-9A-Fa-f]{2}/.test(k)) k = encodeURIComponent(k);
+  var u = EP+"?serviceKey="+k+"&LAWD_CD="+code+"&DEAL_YMD="+ym+"&pageNo="+page+"&numOfRows=1000";
+  var p = $("proxy").value.trim();
+  return p ? p + (p.indexOf("?") < 0 ? "?url=" : "") + encodeURIComponent(u) : u;
+}
+function txt(el, names){
+  for (var i=0;i<names.length;i++){ var n = el.getElementsByTagName(names[i])[0]; if (n && n.textContent.trim()) return n.textContent.trim(); }
+  return "";
+}
+async function fetchPage(code, ym, page){
+  var res;
+  try { res = await fetch(buildUrl(code, ym, page)); }
+  catch(e){ throw new Error("공공데이터포털에 연결하지 못했습니다. 브라우저의 직접 호출이 차단됐을 수 있습니다(CORS). 이 메시지를 그대로 알려주세요."); }
+  var body = await res.text();
+  var doc = new DOMParser().parseFromString(body, "text/xml");
+  var auth = txt(doc, ["returnAuthMsg","errMsg"]);
+  var rc = txt(doc, ["resultCode"]);
+  if (doc.getElementsByTagName("parsererror").length || (!rc && !auth))
+    throw new Error("예상하지 못한 응답입니다 (HTTP "+res.status+"): " + body.slice(0,160));
+  if (auth && !rc) throw new Error("인증키 오류: " + auth + " — 활용신청 승인 여부와 키를 확인하세요. 발급 직후에는 반영까지 시간이 걸릴 수 있습니다.");
+  if (!/^0+$/.test(rc)) throw new Error("조회 오류 ["+rc+"] " + txt(doc, ["resultMsg"]));
+  var items = Array.prototype.map.call(doc.getElementsByTagName("item"), parseItem);
+  return { items: items, total: +txt(doc, ["totalCount"]) || items.length };
+}
+function parseItem(it){
+  var y = +txt(it,["dealYear"]), m = +txt(it,["dealMonth"]), d = +txt(it,["dealDay"]);
+  var umd = txt(it,["umdNm"]), name = txt(it,["aptNm"]), jibun = txt(it,["jibun"]);
+  return { date: D(y,m,d), umd: umd, name: name, jibun: jibun,
+    key: txt(it,["aptSeq"]) || (umd+"|"+name+"|"+jibun),
+    dong: txt(it,["aptDong"]), floor: txt(it,["floor"]), area: parseFloat(txt(it,["excluUseAr"])),
+    amount: parseInt(txt(it,["dealAmount"]).replace(/[^0-9]/g,""),10),
+    type: txt(it,["dealingGbn"]), rgst: txt(it,["rgstDate"]), built: txt(it,["buildYear"]),
+    cancelled: !!txt(it,["cdealDay"]) || /O/i.test(txt(it,["cdealType"])), cdate: txt(it,["cdealDay"]) };
+}
+async function fetchMonth(code, ym){
+  var first = await fetchPage(code, ym, 1), all = first.items;
+  for (var p = 2; all.length < first.total && p <= 20; p++){ all = all.concat((await fetchPage(code, ym, p)).items); }
+  return all;
+}
+$("load").addEventListener("click", async function(){
+  var P = showPeriods();
+  var code = REGIONS[$("sido").value].length ? $("sgg").value : $("code").value.trim();
+  if (!$("key").value.trim()) { $("setup").open = true; return msg("설정에서 인증키를 먼저 입력하세요.", "err"); }
+  if (!P) return msg("평가기준일을 입력하세요.", "err");
+  if (!/^\d{5}$/.test(code)) return msg("시·군·구를 선택하거나 법정동코드 앞 5자리를 입력하세요.", "err");
+  var now = new Date(), today = D(now.getFullYear(), now.getMonth()+1, now.getDate());
+  var last = P.decide < today ? P.decide : today, months = [];
+  for (var c = D(P.extStart.getUTCFullYear(), P.extStart.getUTCMonth()+1, 1); c <= last; c = addMonths(c,1))
+    months.push(c.getUTCFullYear()+String(c.getUTCMonth()+1).padStart(2,"0"));
+  if (!months.length) return msg("조회할 기간이 없습니다. 평가기준일을 확인하세요.", "err");
+  $("load").disabled = true; $("step2").hidden = true; $("result").hidden = true;
+  var trades = [], done = 0, idx = 0, failed = null;
+  async function worker(){
+    while (idx < months.length && !failed){
+      var ym = months[idx++];
+      try { var got = await fetchMonth(code, ym); Array.prototype.push.apply(trades, got); } catch(e){ failed = e; }
+      done++; if (!failed) msg("불러오는 중… " + done + " / " + months.length + "개월");
+    }
+  }
+  await Promise.all([worker(),worker(),worker(),worker()]);
+  $("load").disabled = false;
+  if (failed) return msg(failed.message, "err");
+  state.trades = trades; state.periods = P;
+  msg(months[0].slice(0,4)+"."+months[0].slice(4)+" ~ "+months[months.length-1].slice(0,4)+"."+months[months.length-1].slice(4)+" 매매 "+num(trades.length)+"건을 불러왔습니다. 단지를 선택하세요.");
+  $("step2").hidden = false; $("aptQ").value = ""; fillApts();
+});
+
+/* ---------- 단지 · 면적 ---------- */
+function fillApts(){
+  var q = $("aptQ").value.trim().replace(/\s/g,""), map = {};
+  state.trades.forEach(function(t){
+    var a = map[t.key] || (map[t.key] = { key:t.key, umd:t.umd, name:t.name, jibun:t.jibun, n:0 }); a.n++;
+  });
+  var list = Object.keys(map).map(function(k){ return map[k]; })
+    .filter(function(a){ return !q || (a.umd+a.name).replace(/\s/g,"").indexOf(q) >= 0; })
+    .sort(function(a,b){ return (a.umd+a.name).localeCompare(b.umd+b.name,"ko"); });
+  $("aptList").innerHTML = "";
+  list.forEach(function(a){ $("aptList").add(new Option(a.umd+" · "+a.name+(a.jibun ? " ("+a.jibun+")" : "")+" — "+a.n+"건", a.key)); });
+}
+$("aptQ").addEventListener("input", fillApts);
+$("aptList").addEventListener("change", function(){
+  var areas = {};
+  state.trades.forEach(function(t){ if (t.key === $("aptList").value) areas[t.area] = (areas[t.area]||0)+1; });
+  $("areaChips").innerHTML = Object.keys(areas).map(Number).sort(function(a,b){return a-b;}).map(function(a){
+    return '<button type="button" class="chip" data-a="'+a+'">'+a+'㎡ · '+areas[a]+'건</button>'; }).join("");
+  $("area").value = ""; $("result").hidden = true;
+});
+$("areaChips").addEventListener("click", function(e){
+  var b = e.target.closest(".chip"); if (!b) return;
+  $("area").value = b.dataset.a; render();
+});
+["area","std"].forEach(function(id){ $(id).addEventListener("input", render); });
+$("showAll").addEventListener("change", render);
+
+/* ---------- 결과 ---------- */
+var lastRows = [];
+function render(){
+  var key = $("aptList").value, target = parseFloat($("area").value), P = state.periods;
+  document.querySelectorAll(".chip").forEach(function(c){ c.classList.toggle("on", +c.dataset.a === target); });
+  var std = parseInt($("std").value.replace(/[^0-9]/g,""),10);
+  $("stdRange").textContent = std ? "기준시가 5% 허용 범위: " + num(Math.ceil(std*0.95)) + " ~ " + num(Math.floor(std*1.05)) + "원" : "";
+  if (!key || !(target > 0) || !P) { $("result").hidden = true; return; }
+  var filed = $("filed").value ? parseD($("filed").value) : null, showAll = $("showAll").checked;
+  var rows = state.trades.filter(function(t){ return t.key === key; }).map(function(t){
+    return Object.assign({}, t, { cls: classify(t.date, P, filed), diff: days(t.date, P.base), ad: (t.area-target)/target*100 });
+  }).filter(function(t){ return t.cls !== "out"; });
+  rows.forEach(function(t){ t.areaOk = Math.abs(t.ad) <= 5 + 1e-9; });
+  var live = rows.filter(function(t){ return !t.cancelled && (showAll || t.areaOk); })
+    .sort(function(a,b){ return Math.abs(a.diff)-Math.abs(b.diff) || a.date-b.date; });
+  var cx = rows.filter(function(t){ return t.cancelled && (showAll || t.areaOk); }).sort(function(a,b){ return b.date-a.date; });
+  var cand = live.filter(function(t){ return t.cls === "in" && t.areaOk; });
+  var near = cand.length ? cand.filter(function(t){ return Math.abs(t.diff) === Math.abs(cand[0].diff); }) : [];
+  var avg = near.length ? near.reduce(function(s,t){ return s+t.amount; },0)/near.length : 0;
+  var ext = live.filter(function(t){ return (t.cls === "pre" || t.cls === "post") && t.areaOk; }).length;
+  $("sum").innerHTML =
+    '<div class="pbox"><b>평가기간 내 · 면적 5% 이내</b><span>'+cand.length+'건</span></div>' +
+    '<div class="pbox"><b>확장기간(심의 대상) · 면적 5% 이내</b><span>'+ext+'건</span></div>' +
+    '<div class="pbox"><b>기준일 최근접 사례 (기준시가 요건 미검토)</b><span>'+(near.length ? eok(avg)+(near.length>1 ? " · "+near.length+"건 평균" : "")+" · "+fmt(near[0].date) : "없음")+'</span></div>' +
+    '<div class="pbox"><b>해제된 계약</b><span>'+cx.length+'건</span></div>';
+  var head = ["구분","계약일","기준일 대비","동","층","전용면적(㎡)","면적 차이","거래금액(만원)","거래유형","등기일","비고"];
+  function tr(t){
+    var c = CLS[t.cls], memo = [];
+    if (!t.areaOk) memo.push('<span class="tag t-bad">면적 5% 초과</span>');
+    if (t.type === "직거래") memo.push('<span class="tag t-warn">직거래</span>');
+    if (!t.dong) memo.push("동 미공개");
+    return '<tr'+(near.indexOf(t) >= 0 ? ' class="near"' : '')+'><td><span class="tag '+c[1]+'">'+c[0]+'</span></td><td>'+fmt(t.date)+'</td><td>'+(t.diff>0?"+":"")+t.diff+'일</td><td>'+esc(t.dong||"—")+'</td><td>'+esc(t.floor)+'</td><td class="r">'+t.area+'</td><td class="r">'+(t.ad>0?"+":"")+t.ad.toFixed(2)+'%</td><td class="r">'+num(t.amount)+'</td><td>'+esc(t.type||"—")+'</td><td>'+esc(t.rgst||"—")+'</td><td class="l">'+memo.join(" ")+'</td></tr>';
+  }
+  var th = "<thead><tr>"+head.map(function(h){ return "<th>"+h+"</th>"; }).join("")+"</tr></thead>";
+  $("tbl").innerHTML = th + "<tbody>" + (live.map(tr).join("") || '<tr><td colspan="11">조건에 맞는 사례가 없습니다.</td></tr>') + "</tbody>";
+  $("cxWrap").hidden = !cx.length;
+  $("cx").innerHTML = th.replace("비고","해제일") + "<tbody>" + cx.map(function(t){ return tr(t).replace(/<td class="l">.*?<\/td><\/tr>$/, '<td class="l">'+esc(t.cdate||"해제")+'</td></tr>'); }).join("") + "</tbody>";
+  lastRows = [head].concat(live.map(function(t){
+    return [CLS[t.cls][0], fmt(t.date), t.diff, t.dong, t.floor, t.area, t.ad.toFixed(2)+"%", t.amount, t.type, t.rgst,
+            [t.areaOk?"":"면적 5% 초과", t.type==="직거래"?"직거래":""].filter(Boolean).join(", ")];
+  }));
+  $("result").hidden = false;
+}
+$("copy").addEventListener("click", async function(){
+  var tsv = lastRows.map(function(r){ return r.join("\t"); }).join("\n"), b = $("copy");
+  try { await navigator.clipboard.writeText(tsv); b.textContent = "복사됨"; }
+  catch(e){ b.textContent = "복사 실패 — 표를 직접 드래그하세요"; }
+  setTimeout(function(){ b.textContent = "표 복사 (엑셀 붙여넣기용)"; }, 1800);
+});
+
+window.__yusa = { calcPeriods:calcPeriods, classify:classify, parseD:parseD, fmt:fmt };
+})();
+</script>
+</body>
+</html>
